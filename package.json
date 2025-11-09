@@ -5,7 +5,13 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
+    "start:prod": "NODE_ENV=production node src/app.js",
     "dev": "nodemon src/app.js",
+    "build": "npm run build:prepare && npm run build:assets",
+    "build:prepare": "node scripts/build-prepare.js",
+    "build:assets": "node scripts/build-assets.js",
+    "deploy:vercel": "vercel --prod",
+    "deploy:railway": "railway up",
     "test": "jest",
     "setup": "node src/setup.js"
   },
