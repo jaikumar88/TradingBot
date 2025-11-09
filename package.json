@@ -6,6 +6,11 @@
   "scripts": {
     "start": "node src/app.js",
     "start:prod": "NODE_ENV=production node src/app.js",
+    "start:background": "pm2 start ecosystem.config.js",
+    "stop:background": "pm2 stop trading-bot",
+    "restart:background": "pm2 restart trading-bot",
+    "logs": "pm2 logs trading-bot",
+    "status": "pm2 status",
     "dev": "nodemon src/app.js",
     "build": "npm run build:prepare && npm run build:assets",
     "build:prepare": "node scripts/build-prepare.js",
