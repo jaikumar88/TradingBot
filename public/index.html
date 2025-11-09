@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delta Exchange Trading Terminal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0b0d;
+            --bg-secondary: #111318;
+            --bg-tertiary: #1a1d24;
+            --bg-card: #1e2329;
+            --border-primary: #2b3139;
+            --border-secondary: #363a43;
+            --text-primary: #ffffff;
+            --text-secondary: #b7bdc6;
+            --text-tertiary: #848e9c;
+            --accent-green: #02c076;
+            --accent-red: #f84960;
+            --accent-orange: #ffc107;
+            --accent-blue: #3c9eff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --transition: all 0.15s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+
+        .terminal-header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .terminal-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline { background: var(--accent-red); animation: none; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+
+        .control-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border-secondary);
+            transition: var(--transition);
+            border-radius: 28px;
+            border: 1px solid var(--border-primary);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: var(--text-tertiary);
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+            background: white;
+        }
+
+        .select-modern {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .select-modern:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(60, 158, 255, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-secondary);
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            font-size: 1.25rem;
+            opacity: 0.6;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .positive { color: var(--accent-green); }
+        .negative { color: var(--accent-red); }
+        .neutral { color: var(--text-tertiary); }
+
+        .trades-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .trades-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .trades-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .trades-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-refresh {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-refresh:hover {
+            background: var(--border-primary);
+            color: var(--text-primary);
+        }
+
+        .trades-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .trades-table th {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .trades-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .trades-table tbody tr {
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .trades-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .trades-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active { background: var(--accent-blue); color: white; }
+        .status-closed { background: var(--accent-green); color: white; }
+        .status-pending { background: var(--accent-orange); color: black; }
+        .status-failed { background: var(--accent-red); color: white; }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-primary);
+            border-radius: 50%;
+            border-top-color: var(--accent-blue);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert-banner {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-warning { border-color: var(--accent-orange); }
+        .alert-danger { border-color: var(--accent-red); }
+        .alert-success { border-color: var(--accent-green); }
+
+        .refresh-animation {
+            animation: spin 1s linear infinite;
+        }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 1rem; }
+            .control-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .trades-table { font-size: 0.75rem; }
+            .trades-table th, .trades-table td { padding: 0.75rem 0.5rem; }
+        }
+
+        /* High performance optimizations */
+        .trades-table tbody {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        .stat-card {
+            contain: layout style paint;
+        }
+    </style>
+</head>
+<body>
+    <!-- Terminal Header -->
+    <header class="terminal-header">
+        <div class="header-content">
+            <div class="terminal-logo">
+                <div class="logo-icon">Δ</div>
+                <div>
+                    <div>Delta Exchange Terminal</div>
+                    <div style="font-size: 0.75rem; font-weight: 400; color: var(--text-tertiary);">High-Frequency Trading Platform</div>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="connection-status"></div>
+                <span id="status-text">Connected</span>
+                <button class="btn-refresh" onclick="refreshData()">
+                    <span class="loading-spinner" id="refresh-spinner" style="display: none;"></span>
+                    <span id="refresh-text">↻ Refresh</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Control Panel -->
+        <section class="control-panel">
+            <div class="control-grid">
+                <div class="control-item">
+                    <label class="control-label">Trading Mode</label>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="tradingModeSwitch">
+                            <span class="slider"></span>
+                        </label>
+                        <span id="tradingModeLabel" style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">PAPER</span>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">AI Provider</label>
+                    <select class="select-modern" id="aiProviderSelect">
+                        <option value="pattern_only">⚡ Pattern Only (Ultra Fast)</option>
+                        <option value="ollama">🦙 Ollama (Local AI)</option>
+                        <option value="openai">🤖 OpenAI (Cloud)</option>
+                        <option value="test">🧪 Test Mode</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label class="control-label">AI Analysis</label>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="aiModeSwitch">
+                            <span class="slider"></span>
+                        </label>
+                        <span id="aiModeLabel" style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">TEST</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="trading-alert" class="alert-banner alert-warning" style="margin-top: 1.5rem; margin-bottom: 0;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-orange);"></div>
+                    <strong>PAPER TRADING MODE</strong>
+                </div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;" id="paper-trading-info">
+                    Balance: <span id="paper-balance">$10,000</span> | P&L: <span id="paper-pnl">$0.00</span> | Trades: <span id="paper-trades-count">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Grid -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Total P&L</span>
+                    <span class="stat-icon">💰</span>
+                </div>
+                <div class="stat-value positive" id="total-pnl">$0.00</div>
+                <div class="stat-change neutral" id="pnl-change">No trades yet</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Total Trades</span>
+                    <span class="stat-icon">📊</span>
+                </div>
+                <div class="stat-value neutral" id="total-trades">0</div>
+                <div class="stat-change neutral" id="trades-change">Ready to trade</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Win Rate</span>
+                    <span class="stat-icon">🎯</span>
+                </div>
+                <div class="stat-value neutral" id="win-rate">0%</div>
+                <div class="stat-change neutral" id="winrate-change">No completed trades</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Active Positions</span>
+                    <span class="stat-icon">⚡</span>
+                </div>
+                <div class="stat-value" id="active-trades">0</div>
+                <div class="stat-change neutral" id="active-change">No active positions</div>
+            </div>
+        </section>
+
+        <!-- Trades Table -->
+        <section class="trades-section">
+            <div class="trades-header">
+                <h2 class="trades-title">Trading History</h2>
+                <div class="trades-controls">
+                    <select class="select-modern" id="status-filter" onchange="filterTrades()">
+                        <option value="">All Trades</option>
+                        <option value="active">Active</option>
+                        <option value="closed">Closed</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="trades-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Symbol</th>
+                            <th>Side</th>
+                            <th>Quantity</th>
+                            <th>Entry Price</th>
+                            <th>Current P&L</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trades-table-body">
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-tertiary);">
+                                <div class="loading-spinner" style="margin: 0 auto 1rem;"></div>
+                                Loading trades...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="./dashboard.js"></script>
+</body>
+</html>

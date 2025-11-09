@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delta Exchange Trading Bot</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin: 0;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .stat {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-section {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 10px;
+            margin: 40px 0;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #ecf0f1;
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Delta Exchange Trading Bot</h1>
+            <p>Automated cryptocurrency trading with AI-powered signal analysis</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number">24/7</span>
+                <span>Automated Trading</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">AI</span>
+                <span>Signal Analysis</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">Real-time</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">Risk</span>
+                <span>Management</span>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>Telegram Integration</h3>
+                <p>Monitors messages from Telegram chats and groups, automatically detecting trading signals and opportunities.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <h3>AI-Powered Analysis</h3>
+                <p>Uses OpenAI GPT-4 to analyze messages and market data for intelligent trading signal detection.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">💹</div>
+                <h3>Delta Exchange Trading</h3>
+                <p>Seamless integration with Delta Exchange API for automated trade execution with bracket orders.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Paper Trading</h3>
+                <p>Test strategies and signals without real money to validate your trading approach safely.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📈</div>
+                <h3>Real-time Dashboard</h3>
+                <p>Monitor trades, performance metrics, and portfolio status through an intuitive web interface.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Risk Management</h3>
+                <p>Built-in risk controls with configurable parameters, stop-loss, and slippage protection.</p>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🚀 Quick Start</h2>
+            <p>Get your trading bot up and running in minutes:</p>
+            
+            <div class="code-block">
+<pre># Clone the repository
+git clone https://github.com/jaikumar88/TradingBot.git
+cd TradingBot
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your API keys
+
+# Start the bot
+npm start</pre>
+            </div>
+            
+            <p>Access the dashboard at <strong>http://localhost:3000</strong></p>
+        </div>
+        
+        <div class="cta-section">
+            <h2>Ready to Start Trading?</h2>
+            <p>Join thousands of traders using automated systems to maximize their profits</p>
+            <a href="https://github.com/jaikumar88/TradingBot" class="cta-button">View on GitHub</a>
+            <a href="https://github.com/jaikumar88/TradingBot/releases" class="cta-button">Download Latest</a>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 Delta Exchange Trading Bot. Built with ❤️ for the crypto community.</p>
+            <p>
+                <a href="https://github.com/jaikumar88/TradingBot/issues">Report Issues</a> | 
+                <a href="https://github.com/jaikumar88/TradingBot/wiki">Documentation</a> | 
+                <a href="https://github.com/jaikumar88/TradingBot/discussions">Community</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

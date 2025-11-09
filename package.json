@@ -1,0 +1,53 @@
+{
+  "name": "deltaexchange-trading-bot",
+  "version": "1.0.0",
+  "description": "Automated trading bot that reads Telegram messages, analyzes them with OpenAI, and executes trades on Delta Exchange",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest",
+    "setup": "node src/setup.js"
+  },
+  "keywords": [
+    "trading",
+    "telegram",
+    "openai",
+    "delta-exchange",
+    "cryptocurrency",
+    "bot"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "canvas": "^3.2.0",
+    "cors": "^2.8.5",
+    "cron": "^3.1.6",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "input": "^1.0.1",
+    "jimp": "^1.6.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "node-telegram-bot-api": "^0.64.0",
+    "openai": "^4.20.1",
+    "rate-limiter-flexible": "^4.0.1",
+    "sharp": "^0.34.5",
+    "sqlite3": "^5.1.6",
+    "telegram": "^2.26.22",
+    "tesseract.js": "^6.0.1",
+    "winston": "^3.11.0",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.4",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
