@@ -7,22 +7,10 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/dashboard",
-      "dest": "/dashboard.html"
-    },
-    {
-      "src": "/dashboard.html",
-      "dest": "/dashboard.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
     }
   ],
   "cleanUrls": true,
