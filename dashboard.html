@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delta Exchange Trading Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0b0d;
+            --bg-secondary: #111318;
+            --bg-tertiary: #1a1d24;
+            --bg-card: #1e2329;
+            --border-primary: #2b3139;
+            --border-secondary: #363a43;
+            --text-primary: #ffffff;
+            --text-secondary: #b7bdc6;
+            --text-tertiary: #848e9c;
+            --accent-green: #02c076;
+            --accent-red: #f84960;
+            --accent-orange: #ffc107;
+            --accent-blue: #3c9eff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --transition: all 0.15s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-primary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .positive { color: var(--accent-green); }
+        .negative { color: var(--accent-red); }
+        .neutral { color: var(--accent-blue); }
+
+        .trades-table {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .table-content {
+            padding: 1rem;
+        }
+
+        .trade-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-primary);
+            align-items: center;
+        }
+
+        .trade-row:last-child {
+            border-bottom: none;
+        }
+
+        .trade-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .price {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .connection-status {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .demo-notice {
+            background: linear-gradient(135deg, var(--accent-orange), #ff9500);
+            color: #000;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .github-link:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .trade-row, .trade-header {
+                grid-template-columns: 1fr 1fr 1fr;
+                font-size: 0.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                🤖 <a href="index.html" style="color: var(--text-primary); text-decoration: none;">Delta Exchange Trading Bot</a>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Demo Mode</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="demo-notice">
+            📊 This is a demo version of the trading dashboard. For live trading and real-time data, run the bot locally or deploy to a cloud platform.
+        </div>
+
+        <div class="connection-status">
+            <h3>🔗 Connection Status</h3>
+            <p>This is a static demo. To see live trades, deploy the full application using the instructions in the repository.</p>
+            <br>
+            <a href="https://github.com/jaikumar88/TradingBot" class="github-link">
+                📂 View Repository & Deployment Guide
+            </a>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value positive">$142.90</div>
+                <div class="stat-label">Total P&L</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value neutral">3</div>
+                <div class="stat-label">Active Trades</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value positive">85.7%</div>
+                <div class="stat-label">Win Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value neutral">$2,450</div>
+                <div class="stat-label">Portfolio Value</div>
+            </div>
+        </div>
+
+        <div class="trades-table">
+            <div class="table-header">
+                📈 Recent Trades
+            </div>
+            <div class="trade-header">
+                <div>Symbol</div>
+                <div>Side</div>
+                <div>Entry Price</div>
+                <div>Current Price</div>
+                <div>P&L</div>
+            </div>
+            <div class="table-content">
+                <div class="trade-row">
+                    <div class="symbol">ETHUSD</div>
+                    <div class="positive">LONG</div>
+                    <div class="price">$3,485.35</div>
+                    <div class="price">$3,533.65</div>
+                    <div class="positive">+$47.30</div>
+                </div>
+                <div class="trade-row">
+                    <div class="symbol">BTCUSD</div>
+                    <div class="positive">LONG</div>
+                    <div class="price">$75,240.50</div>
+                    <div class="price">$76,180.25</div>
+                    <div class="positive">+$939.75</div>
+                </div>
+                <div class="trade-row">
+                    <div class="symbol">ETHUSD</div>
+                    <div class="negative">SHORT</div>
+                    <div class="price">$3,520.00</div>
+                    <div class="price">$3,495.15</div>
+                    <div class="positive">+$24.85</div>
+                </div>
+                <div class="trade-row">
+                    <div class="symbol">ADAUSD</div>
+                    <div class="positive">LONG</div>
+                    <div class="price">$0.7850</div>
+                    <div class="price">$0.7920</div>
+                    <div class="positive">+$70.00</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>🎯 Trading Features</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-primary);">
+                        ✅ AI-Powered Signal Analysis
+                    </li>
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-primary);">
+                        ✅ Telegram Integration
+                    </li>
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-primary);">
+                        ✅ Risk Management
+                    </li>
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-primary);">
+                        ✅ Real-time Monitoring
+                    </li>
+                    <li style="padding: 0.5rem 0;">
+                        ✅ Automated Trading
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>📊 Market Data</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                        <span class="symbol">BTC/USD</span>
+                        <span class="positive price">$76,180.25</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                        <span class="symbol">ETH/USD</span>
+                        <span class="positive price">$3,533.65</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                        <span class="symbol">ADA/USD</span>
+                        <span class="positive price">$0.7920</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation for demo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate numbers
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(value => {
+                value.style.opacity = '0';
+                value.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    value.style.transition = 'all 0.8s ease';
+                    value.style.opacity = '1';
+                    value.style.transform = 'translateY(0)';
+                }, Math.random() * 500);
+            });
+
+            // Update demo prices occasionally
+            setInterval(() => {
+                updateDemoPrices();
+            }, 5000);
+        });
+
+        function updateDemoPrices() {
+            const prices = document.querySelectorAll('.price');
+            prices.forEach(price => {
+                const currentPrice = parseFloat(price.textContent.replace(/[$,]/g, ''));
+                if (!isNaN(currentPrice)) {
+                    const variation = (Math.random() - 0.5) * 0.02; // ±1%
+                    const newPrice = currentPrice * (1 + variation);
+                    
+                    if (currentPrice > 1000) {
+                        price.textContent = '$' + newPrice.toFixed(2);
+                    } else if (currentPrice > 1) {
+                        price.textContent = '$' + newPrice.toFixed(2);
+                    } else {
+                        price.textContent = '$' + newPrice.toFixed(4);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
