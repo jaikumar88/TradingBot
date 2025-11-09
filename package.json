@@ -12,6 +12,7 @@
     "build:assets": "node scripts/build-assets.js",
     "deploy:vercel": "vercel --prod",
     "deploy:railway": "railway up",
+    "deploy:render": "echo 'Push to main branch to deploy to Render'",
     "test": "jest",
     "setup": "node src/setup.js"
   },
