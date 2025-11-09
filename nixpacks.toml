@@ -1,0 +1,12 @@
+# Nixpacks configuration for Railway
+[phases.setup]
+nixPkgs = ['nodejs-18_x', 'python3']
+
+[phases.install]
+cmds = ['npm ci --only=production']
+
+[phases.build]
+cmds = ['mkdir -p data']
+
+[start]
+cmd = 'node src/app.js'

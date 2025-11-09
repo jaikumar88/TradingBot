@@ -11,7 +11,9 @@ RUN npm ci --only=production
 # Copy application code
 COPY src ./src
 COPY public ./public
-COPY config ./config
+
+# Create config directory if it doesn't exist
+RUN mkdir -p config
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
@@ -24,5 +26,6 @@ USER nextjs
 EXPOSE 3000
 
 ENV NODE_ENV=production
+ENV PORT=3000
 
 CMD ["node", "src/app.js"]
