@@ -1,27 +1,30 @@
 {
   "version": 2,
-  "name": "trading-bot",
+  "name": "tradingbot-dashboard",
   "builds": [
     {
-      "src": "src/app.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**/*",
+      "src": "**",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/src/app.js"
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard.html"
+    },
+    {
+      "src": "/dashboard.html",
+      "dest": "/dashboard.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/public/$1"
+      "dest": "/$1"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "cleanUrls": true,
+  "trailingSlash": false
 }

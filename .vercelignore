@@ -1,0 +1,51 @@
+# Node.js files (not needed for static deployment)
+src/
+node_modules/
+package.json
+package-lock.json
+
+# Python backend (not needed for static frontend)
+python-backend/
+__pycache__/
+*.py
+requirements.txt
+
+# Development files
+.env
+.env.*
+data/
+logs/
+temp/
+.dist/
+
+# Build artifacts
+dist/
+build/
+
+# Documentation (optional, can include if wanted)
+*.md
+!README.md
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+
+# Testing files
+test_*.js
+*.test.js
+
+# Scripts
+scripts/
+setup_*.sh
+setup_*.bat
+start_*.bat
+
+# Binary files
+eng.traineddata
+*.db
+*.sqlite
+*.sqlite3
