@@ -94,10 +94,30 @@ class DatabaseService {
                 )
             `;
 
+            const createProductsTable = `
+                CREATE TABLE IF NOT EXISTS products (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    productId TEXT UNIQUE NOT NULL,
+                    symbol TEXT NOT NULL,
+                    underlyingAsset TEXT,
+                    quotingAsset TEXT,
+                    settlementAsset TEXT,
+                    contractType TEXT,
+                    contractValue REAL,
+                    tickSize REAL,
+                    minSizeBase REAL,
+                    maxSizeBase REAL,
+                    isActive BOOLEAN DEFAULT 1,
+                    lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            `;
+
             this.db.serialize(() => {
                 this.db.run(createTradesTable);
                 this.db.run(createMessagesTable);
-                this.db.run(createTradeHistoryTable, (err) => {
+                this.db.run(createTradeHistoryTable);
+                this.db.run(createProductsTable, (err) => {
                     if (err) {
                         reject(err);
                     } else {
@@ -143,9 +163,9 @@ class DatabaseService {
                 trade.stopLoss,
                 trade.takeProfit,
                 trade.status,
-                JSON.stringify(trade.telegramMessage),
-                JSON.stringify(trade.aiAnalysis),
-                trade.openTime.toISOString(),
+                JSON.stringify(trade.telegramMessage || {}),
+                JSON.stringify(trade.aiAnalysis || {}),
+                (trade.openTime || new Date()).toISOString(),
                 trade.isPaperTrade ? 1 : 0,
                 trade.failReason || null
             ];
@@ -179,6 +199,22 @@ class DatabaseService {
                 } else {
                     logger.info(`Trade updated: ${tradeId}`);
                     resolve({ id: tradeId, changes: this.changes });
+                }
+            });
+        });
+    }
+
+    async deleteTrade(tradeId) {
+        return new Promise((resolve, reject) => {
+            const sql = 'DELETE FROM trades WHERE id = ?';
+            
+            this.db.run(sql, [tradeId], function(err) {
+                if (err) {
+                    logger.error('Error deleting trade:', err);
+                    reject(err);
+                } else {
+                    logger.info(`Trade deleted: ${tradeId}`);
+                    resolve({ id: tradeId, deleted: this.changes > 0 });
                 }
             });
         });
@@ -359,6 +395,146 @@ class DatabaseService {
             pnl: row.pnl,
             fees: row.fees,
             isPaperTrade: row.isPaperTrade === 1
+        });
+    }
+
+    // Products Management Methods
+    async saveProducts(products) {
+        return new Promise((resolve, reject) => {
+            const insertSql = `
+                INSERT OR REPLACE INTO products (
+                    productId, symbol, underlyingAsset, quotingAsset, settlementAsset,
+                    contractType, contractValue, tickSize, minSizeBase, maxSizeBase,
+                    isActive, lastUpdated
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            `;
+
+            const stmt = this.db.prepare(insertSql);
+            let completed = 0;
+            let hasError = false;
+
+            products.forEach(product => {
+                stmt.run([
+                    product.id,
+                    product.symbol,
+                    product.underlying_asset?.symbol || null,
+                    product.quoting_asset?.symbol || null,
+                    product.settlement_asset?.symbol || null,
+                    product.contract_type,
+                    product.contract_value || 0,
+                    product.tick_size || 0,
+                    product.min_size_base || 0,
+                    product.max_size_base || 0,
+                    product.state === 'live' ? 1 : 0
+                ], (err) => {
+                    if (err && !hasError) {
+                        hasError = true;
+                        reject(err);
+                        return;
+                    }
+                    
+                    completed++;
+                    if (completed === products.length && !hasError) {
+                        stmt.finalize();
+                        logger.info(`✅ Saved ${products.length} products to database`);
+                        resolve(products.length);
+                    }
+                });
+            });
+        });
+    }
+
+    async getProductBySymbol(symbol) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT * FROM products 
+                WHERE symbol = ? AND isActive = 1 
+                ORDER BY lastUpdated DESC 
+                LIMIT 1
+            `;
+            
+            this.db.get(sql, [symbol], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row ? {
+                        productId: row.productId,
+                        symbol: row.symbol,
+                        underlyingAsset: row.underlyingAsset,
+                        quotingAsset: row.quotingAsset,
+                        settlementAsset: row.settlementAsset,
+                        contractType: row.contractType,
+                        contractValue: row.contractValue,
+                        tickSize: row.tickSize,
+                        minSizeBase: row.minSizeBase,
+                        maxSizeBase: row.maxSizeBase,
+                        lastUpdated: row.lastUpdated
+                    } : null);
+                }
+            });
+        });
+    }
+
+    async getAllProducts() {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT * FROM products 
+                WHERE isActive = 1 
+                ORDER BY symbol ASC
+            `;
+            
+            this.db.all(sql, [], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows.map(row => ({
+                        productId: row.productId,
+                        symbol: row.symbol,
+                        underlyingAsset: row.underlyingAsset,
+                        quotingAsset: row.quotingAsset,
+                        settlementAsset: row.settlementAsset,
+                        contractType: row.contractType,
+                        contractValue: row.contractValue,
+                        tickSize: row.tickSize,
+                        minSizeBase: row.minSizeBase,
+                        maxSizeBase: row.maxSizeBase,
+                        lastUpdated: row.lastUpdated
+                    })));
+                }
+            });
+        });
+    }
+
+    async getProductsLastUpdated() {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT MAX(lastUpdated) as lastUpdated 
+                FROM products 
+                WHERE isActive = 1
+            `;
+            
+            this.db.get(sql, [], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row?.lastUpdated ? new Date(row.lastUpdated) : null);
+                }
+            });
+        });
+    }
+
+    async clearProducts() {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM products`;
+            
+            this.db.run(sql, [], (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    logger.info('✅ Cleared products cache');
+                    resolve();
+                }
+            });
         });
     }
 

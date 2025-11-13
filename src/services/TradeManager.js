@@ -193,9 +193,47 @@ class TradeManager {
             
             logger.info(`✅ Ticker validated: ${normalizedSymbol} - Current price: $${marketPrice} - Product ID: ${productId}`);
 
-            // Validate entry price before proceeding
+            // If no entry price provided, use best bid price as fallback
             if (!trade.entryPrice || trade.entryPrice <= 0) {
-                const errorMsg = `🚫 Trade rejected: Invalid entry price: $${trade.entryPrice}`;
+                logger.info('🔄 No entry price provided, getting best bid price from order book...');
+                
+                try {
+                    const orderBook = await this.deltaService.getOrderBook(normalizedSymbol);
+                    const bestBidPrice = orderBook.bestBid;
+                    
+                    if (bestBidPrice && bestBidPrice > 0) {
+                        trade.entryPrice = bestBidPrice;
+                        logger.info(`✅ Using best bid price as entry price: $${bestBidPrice}`);
+                        
+                        // Update trade in database with the best bid price
+                        await this.db.updateTrade(trade.id, { entryPrice: bestBidPrice });
+                    } else {
+                        const errorMsg = `🚫 Trade rejected: No valid best bid price available in order book`;
+                        logger.error(errorMsg);
+                        
+                        await this.db.updateTrade(trade.id, { 
+                            status: 'failed',
+                            failReason: 'No valid best bid price available'
+                        });
+                        
+                        throw new Error(errorMsg);
+                    }
+                } catch (orderBookError) {
+                    const errorMsg = `🚫 Trade rejected: Failed to get order book data - ${orderBookError.message}`;
+                    logger.error(errorMsg);
+                    
+                    await this.db.updateTrade(trade.id, { 
+                        status: 'failed',
+                        failReason: 'Failed to get order book data'
+                    });
+                    
+                    throw new Error(errorMsg);
+                }
+            }
+
+            // Validate entry price after potential fallback assignment
+            if (!trade.entryPrice || trade.entryPrice <= 0) {
+                const errorMsg = `🚫 Trade rejected: Invalid entry price after fallback: $${trade.entryPrice}`;
                 logger.error(errorMsg);
                 
                 await this.db.updateTrade(trade.id, { 
@@ -231,13 +269,6 @@ class TradeManager {
             }
             
             logger.info(`✅ Price slippage check passed: ${priceDifference.toFixed(2)}% (within 1% tolerance)`);
-
-            // For Python backend signals without entry price, use market price
-            if (!trade.entryPrice || trade.entryPrice === null) {
-                logger.info('No entry price provided, using current market price');
-                trade.entryPrice = marketPrice;
-                await this.db.updateTrade(trade.id, { entryPrice: marketPrice });
-            }
 
             // Handle percentage-based stop loss and take profit
             if (trade.aiAnalysis && trade.aiAnalysis.stopLossPercent !== undefined) {
@@ -465,7 +496,7 @@ class TradeManager {
 
             logger.info(`Closing trade: ${tradeId} (${reason})`);
 
-            // Cancel any open orders
+            // Cancel any open orders first
             if (trade.stopLossOrderId) {
                 try {
                     await this.deltaService.cancelOrder(trade.stopLossOrderId);
@@ -484,6 +515,25 @@ class TradeManager {
                 }
             }
 
+            // Actually close the position on Delta Exchange (if not paper trading)
+            let closeOrderResult = null;
+            if (!this.deltaService.paperTrade) {
+                try {
+                    // Place opposite market order to close position
+                    const closeSide = trade.side === 'buy' ? 'sell' : 'buy';
+                    closeOrderResult = await this.deltaService.placeMarketOrder(
+                        trade.symbol,
+                        closeSide,
+                        trade.quantity,
+                        trade.productId
+                    );
+                    logger.info(`Placed closing order for trade ${tradeId}: ${closeOrderResult.id}`);
+                } catch (error) {
+                    logger.error(`Error placing closing order for trade ${tradeId}:`, error);
+                    throw new Error(`Failed to close position on exchange: ${error.message}`);
+                }
+            }
+
             // Get exit price
             if (!exitPrice) {
                 exitPrice = await this.deltaService.getMarketPrice(trade.symbol);
@@ -492,18 +542,21 @@ class TradeManager {
             // Calculate P&L
             const pnl = this.calculatePnL(trade, exitPrice);
 
-            // Update trade
+            // Update trade in database
             const updates = {
                 status: 'closed',
                 closeTime: new Date().toISOString(),
-                pnl: pnl
+                pnl: pnl,
+                exitPrice: exitPrice,
+                closeOrderId: closeOrderResult ? closeOrderResult.id : null
             };
 
             await this.db.updateTrade(trade.id, updates);
             await this.db.addTradeHistory(trade.id, 'closed', {
                 reason: reason,
                 exitPrice: exitPrice,
-                pnl: pnl
+                pnl: pnl,
+                closeOrderId: closeOrderResult ? closeOrderResult.id : null
             });
 
             // Update paper trading balance
@@ -711,6 +764,167 @@ class TradeManager {
                 failReason: `Follow trade execution failed: ${error.message}`
             });
             
+            throw error;
+        }
+    }
+
+    // Validate trade input parameters
+    validateTradeInputs({ symbol, side, quantity, type }) {
+        try {
+            // Validate symbol
+            if (!symbol || typeof symbol !== 'string' || symbol.trim().length === 0) {
+                return { valid: false, error: 'Symbol is required and must be a non-empty string' };
+            }
+
+            // Validate side
+            const validSides = ['buy', 'sell', 'long', 'short'];
+            if (!side || !validSides.includes(side.toLowerCase())) {
+                return { valid: false, error: `Side must be one of: ${validSides.join(', ')}` };
+            }
+
+            // Validate quantity
+            if (!quantity || quantity === null || quantity === undefined) {
+                return { valid: false, error: 'Quantity is required' };
+            }
+
+            const parsedQuantity = parseFloat(quantity);
+            if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+                return { valid: false, error: 'Quantity must be a positive number greater than 0' };
+            }
+
+            if (parsedQuantity > 1000) {
+                return { valid: false, error: 'Quantity is too large (max: 1000)' };
+            }
+
+            if (parsedQuantity < 0.001) {
+                return { valid: false, error: 'Quantity is too small (min: 0.001)' };
+            }
+
+            // Validate type
+            const validTypes = ['market', 'limit'];
+            if (type && !validTypes.includes(type.toLowerCase())) {
+                return { valid: false, error: `Order type must be one of: ${validTypes.join(', ')}` };
+            }
+
+            return { valid: true };
+        } catch (error) {
+            return { valid: false, error: `Validation error: ${error.message}` };
+        }
+    }
+
+    // Create manual trade for quick trade functionality
+    async createManualTrade({ symbol, side, quantity, type = 'market', source = 'manual' }) {
+        try {
+            logger.info(`Creating manual trade: ${side} ${quantity} ${symbol} (${type})`);
+
+            // Step 1: Validate input parameters
+            const validation = this.validateTradeInputs({ symbol, side, quantity, type });
+            if (!validation.valid) {
+                throw new Error(`Trade validation failed: ${validation.error}`);
+            }
+
+            // Step 2: Validate ticker and get product information
+            const tickerValidation = await this.deltaService.validateTicker(symbol);
+            
+            if (!tickerValidation.valid) {
+                throw new Error(`Invalid symbol: ${symbol} - ${tickerValidation.error}`);
+            }
+
+            const normalizedSymbol = tickerValidation.symbol;
+            const marketPrice = tickerValidation.price;
+            const productId = tickerValidation.productId;
+            
+            // Step 3: Validate product ID exists
+            if (!productId || productId === null || productId === undefined) {
+                throw new Error(`Product ID not found for symbol ${normalizedSymbol}. Cannot place order without product_id.`);
+            }
+            
+            logger.info(`✅ Symbol validated: ${normalizedSymbol} - Price: $${marketPrice} - Product ID: ${productId}`);
+
+            // Get best bid price from order book for entry price
+            let entryPrice;
+            try {
+                const orderBook = await this.deltaService.getOrderBook(normalizedSymbol);
+                const bestBidPrice = orderBook.bestBid;
+                
+                if (bestBidPrice && bestBidPrice > 0) {
+                    entryPrice = bestBidPrice;
+                    logger.info(`✅ Using best bid price as entry price: $${bestBidPrice}`);
+                } else {
+                    // Fallback to market price if no best bid available
+                    entryPrice = marketPrice;
+                    logger.warn(`⚠️ No best bid available, using market price: $${marketPrice}`);
+                }
+            } catch (orderBookError) {
+                // Fallback to market price if order book fails
+                entryPrice = marketPrice;
+                logger.warn(`⚠️ Order book failed, using market price: $${marketPrice} - ${orderBookError.message}`);
+            }
+
+            // Create trade data
+            const tradeData = {
+                symbol: normalizedSymbol,
+                side: side.toLowerCase(),
+                quantity: parseFloat(quantity),
+                entryPrice: entryPrice,
+                stopLoss: null,
+                takeProfit: null,
+                source: source,
+                message: `Manual ${side} trade for ${normalizedSymbol}`,
+                confidence: 1.0,
+                reason: `Quick trade: ${side} ${quantity} ${normalizedSymbol}`,
+                openTime: new Date(),
+                isPaperTrade: false,
+                telegramMessage: null,
+                aiAnalysis: null
+            };
+
+            // For quick trades, execute immediately
+            if (type === 'market') {
+                // Place market order directly
+                const entryOrder = await this.deltaService.placeMarketOrder(
+                    normalizedSymbol,
+                    side.toLowerCase(),
+                    parseFloat(quantity),
+                    productId,
+                    null, // No stop loss for quick trades
+                    null  // No take profit for quick trades
+                );
+
+                // Save trade to database
+                const savedTrade = await this.db.saveTrade({
+                    ...tradeData,
+                    status: 'active',
+                    deltaOrderId: entryOrder.id
+                });
+
+                // Add to active trades
+                this.activeTrades.set(savedTrade.id, savedTrade);
+
+                // Add trade history
+                await this.db.addTradeHistory(savedTrade.id, 'quick_trade_placed', {
+                    orderId: entryOrder.id,
+                    marketPrice: marketPrice,
+                    source: source
+                });
+
+                logger.info(`✅ Quick trade executed: ${side} ${quantity} ${normalizedSymbol} @ $${marketPrice}`);
+
+                return {
+                    id: savedTrade.id,
+                    orderId: entryOrder.id,
+                    symbol: normalizedSymbol,
+                    side: side.toLowerCase(),
+                    quantity: parseFloat(quantity),
+                    price: marketPrice,
+                    status: 'active'
+                };
+            } else {
+                throw new Error('Only market orders are supported for quick trades');
+            }
+
+        } catch (error) {
+            logger.error('Error creating manual trade:', error);
             throw error;
         }
     }

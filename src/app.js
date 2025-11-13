@@ -35,8 +35,8 @@ class TradingBot {
             await this.databaseService.init();
             logger.info('✅ Database initialized');
 
-            // Initialize Delta Exchange service
-            this.deltaService = new DeltaExchangeService(this.config);
+            // Initialize Delta Exchange service with database for products caching
+            this.deltaService = new DeltaExchangeService(this.config, this.databaseService);
             logger.info('✅ Delta Exchange service initialized');
 
             // Initialize AI service

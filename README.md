@@ -47,6 +47,144 @@ An automated trading bot that reads messages from Telegram chats/groups, analyze
 5. **Access the dashboard**
    Open http://localhost:3000 in your browser
 
+## 🖥️ Local Background Deployment (Recommended)
+
+For continuous 24/7 trading on your laptop/PC:
+
+### Quick Setup Commands
+
+```bash
+# 1. Install PM2 (Process Manager) globally
+npm install -g pm2
+
+# 2. Create logs directory
+mkdir logs
+
+# 3. Start trading bot in background
+pm2 start src/app.js --name "trading-bot"
+
+# 4. Setup auto-restart on system reboot
+pm2 startup
+pm2 save
+
+# 5. Access your dashboard
+# Open http://localhost:3000 in browser
+```
+
+### Management Commands
+
+```bash
+# Check bot status
+pm2 status
+pm2 list
+
+# View real-time logs
+pm2 logs trading-bot
+
+# Stop the bot
+pm2 stop trading-bot
+
+# Restart the bot
+pm2 restart trading-bot
+
+# Remove the bot completely
+pm2 delete trading-bot
+
+# Monitor CPU/Memory usage
+pm2 monit
+```
+
+### Windows Batch Scripts
+
+Create these files for easy management:
+
+**start-bot.bat**
+```batch
+@echo off
+echo Starting Trading Bot...
+pm2 start src/app.js --name "trading-bot"
+echo Bot started! Dashboard: http://localhost:3000
+pause
+```
+
+**stop-bot.bat**
+```batch
+@echo off
+echo Stopping Trading Bot...
+pm2 stop trading-bot
+echo Bot stopped!
+pause
+```
+
+**restart-bot.bat**
+```batch
+@echo off
+echo Restarting Trading Bot...
+pm2 restart trading-bot
+echo Bot restarted! Dashboard: http://localhost:3000
+pause
+```
+
+**view-logs.bat**
+```batch
+@echo off
+echo Viewing Trading Bot Logs...
+pm2 logs trading-bot
+pause
+```
+
+**check-status.bat**
+```batch
+@echo off
+echo Checking Trading Bot Status...
+pm2 status
+echo Dashboard: http://localhost:3000
+pause
+```
+
+**monitor-bot.bat**
+```batch
+@echo off
+echo Opening Bot Monitor...
+pm2 monit
+```
+
+### PowerShell Scripts
+
+**start-trading-bot.ps1**
+```powershell
+Write-Host "Starting Trading Bot..." -ForegroundColor Green
+pm2 start src/app.js --name "trading-bot"
+Write-Host "✅ Trading Bot Started!" -ForegroundColor Green
+Write-Host "📊 Dashboard: http://localhost:3000" -ForegroundColor Cyan
+Write-Host "📝 View logs: pm2 logs trading-bot" -ForegroundColor Yellow
+```
+
+### Benefits of Local Deployment
+
+- ✅ **No cloud costs** - runs on your hardware
+- ✅ **Full control** - complete access to logs and data
+- ✅ **No deployment issues** - no platform limitations
+- ✅ **24/7 operation** - runs continuously in background
+- ✅ **Instant access** - dashboard always at localhost:3000
+- ✅ **Auto-restart** - PM2 handles crashes and reboots
+- ✅ **Resource monitoring** - real-time CPU/memory usage
+
+### Auto-Start on Windows Boot
+
+```bash
+# 1. Setup PM2 startup (run as administrator)
+pm2 startup windows
+
+# 2. Start your bot
+pm2 start src/app.js --name "trading-bot"
+
+# 3. Save PM2 configuration
+pm2 save
+
+# 4. Your bot will now start automatically on Windows boot
+```
+
 ## ⚙️ Configuration
 
 ### Required Environment Variables
@@ -240,3 +378,89 @@ This trading bot is for educational and testing purposes. Cryptocurrency trading
 - [ ] Send test trading messages
 - [ ] Monitor dashboard for signals and trades
 - [ ] Review and adjust configuration as needed
+
+## 🔧 Troubleshooting Local Deployment
+
+### Common PM2 Issues
+
+```bash
+# PM2 not installed globally
+npm install -g pm2
+
+# Permission issues (Windows)
+# Run PowerShell/CMD as Administrator
+
+# Check if bot is running
+pm2 status
+
+# Bot not starting
+pm2 logs trading-bot
+# Check logs for error messages
+
+# Port 3000 already in use
+# Change PORT in .env file or stop other services
+netstat -ano | findstr :3000
+
+# Reset PM2 completely
+pm2 kill
+pm2 start src/app.js --name "trading-bot"
+```
+
+### Dashboard Access Issues
+
+```bash
+# Check if bot is running
+pm2 status
+
+# Verify port in logs
+pm2 logs trading-bot | findstr "port\|Port\|PORT"
+
+# Try different browser
+# Open http://localhost:3000
+# Try http://127.0.0.1:3000
+
+# Check Windows Firewall
+# Allow Node.js through Windows Firewall
+```
+
+### Environment Issues
+
+```bash
+# Verify .env file exists
+dir .env
+
+# Check environment variables
+echo %NODE_ENV%
+
+# Missing dependencies
+npm install
+
+# Clear npm cache
+npm cache clean --force
+```
+
+### Quick Recovery Commands
+
+```bash
+# Complete restart
+pm2 delete all
+npm install
+pm2 start src/app.js --name "trading-bot"
+
+# Reset everything
+pm2 kill
+rmdir /s logs
+mkdir logs
+pm2 start src/app.js --name "trading-bot"
+
+# Emergency stop
+pm2 stop all
+# or
+taskkill /f /im node.exe
+```
+
+## 📞 Support
+
+- **GitHub Issues**: [Report bugs](https://github.com/jaikumar88/TradingBot/issues)
+- **Discussions**: [Community help](https://github.com/jaikumar88/TradingBot/discussions)
+- **Documentation**: Check README and wiki

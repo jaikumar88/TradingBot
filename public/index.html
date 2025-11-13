@@ -101,6 +101,88 @@
             50% { opacity: 0.5; }
         }
 
+        /* Tab Navigation Styles */
+        .tab-navigation {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-nav-list {
+            display: flex;
+            gap: 0.25rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-nav-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .tab-nav-button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .tab-nav-button:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .tab-nav-button.active {
+            background: var(--accent-blue);
+            color: white;
+            box-shadow: 0 2px 8px rgba(60, 158, 255, 0.3);
+        }
+
+        .tab-nav-icon {
+            font-size: 1rem;
+        }
+
+        /* Tab Content Styles */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive tab navigation */
+        @media (max-width: 768px) {
+            .tab-nav-list {
+                flex-direction: column;
+            }
+            
+            .tab-nav-item {
+                min-width: auto;
+            }
+            
+            .tab-nav-button {
+                justify-content: flex-start;
+                padding: 1rem;
+            }
+        }
+
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -204,6 +286,110 @@
             box-shadow: 0 0 0 2px rgba(60, 158, 255, 0.2);
         }
 
+        .input-modern {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .input-modern:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(60, 158, 255, 0.2);
+        }
+
+        .input-modern::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .input-help {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-style: italic;
+        }
+
+        .btn-modern {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #01a762;
+            transform: translateY(-1px);
+        }
+
+        .btn-success:disabled {
+            background: var(--border-secondary);
+            color: var(--text-tertiary);
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-color: var(--border-secondary);
+        }
+
+        .range-modern {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg-tertiary);
+            outline: none;
+            border: 1px solid var(--border-primary);
+        }
+
+        .range-modern::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .range-modern::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -262,6 +448,25 @@
         .positive { color: var(--accent-green); }
         .negative { color: var(--accent-red); }
         .neutral { color: var(--text-tertiary); }
+
+        /* Platform Banner Styles */
+        .platform-banner {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-banner.active {
+            background: linear-gradient(135deg, rgba(2, 192, 118, 0.1), rgba(2, 192, 118, 0.05));
+            border-color: var(--accent-green);
+        }
+
+        .platform-banner.inactive {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+            border-color: var(--accent-orange);
+        }
 
         .trades-section {
             background: var(--bg-card);
@@ -362,6 +567,23 @@
         .status-pending { background: var(--accent-orange); color: black; }
         .status-failed { background: var(--accent-red); color: white; }
 
+        .delete-trade-btn {
+            background: var(--accent-red) !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.25rem 0.5rem !important;
+            border-radius: 4px !important;
+            font-size: 0.75rem !important;
+            cursor: pointer !important;
+            opacity: 0.8 !important;
+            transition: opacity 0.2s ease !important;
+        }
+
+        .delete-trade-btn:hover {
+            opacity: 1 !important;
+            transform: translateY(-1px);
+        }
+
         .loading-spinner {
             display: inline-block;
             width: 16px;
@@ -393,6 +615,133 @@
 
         .refresh-animation {
             animation: spin 1s linear infinite;
+        }
+
+        /* Active Trades Styles */
+        .active-trades-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .active-trade-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .active-trade-item:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .active-trade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .active-trade-symbol {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .active-trade-side {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .active-trade-side.long {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .active-trade-side.short {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        .active-trade-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .active-trade-detail {
+            text-align: center;
+        }
+
+        .active-trade-detail-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .active-trade-detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .active-trade-pnl.positive {
+            color: var(--accent-green);
+        }
+
+        .active-trade-pnl.negative {
+            color: var(--accent-red);
+        }
+
+        .active-trade-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .active-trade-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .active-trade-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .active-trade-btn.close {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .active-trade-btn.flip {
+            background: var(--accent-orange);
+            color: white;
+        }
+
+        .no-data-state {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            border: 1px dashed var(--border-secondary);
         }
 
         @media (max-width: 768px) {
@@ -438,131 +787,742 @@
 
     <!-- Main Container -->
     <main class="main-container">
-        <!-- Control Panel -->
-        <section class="control-panel">
-            <div class="control-grid">
-                <div class="control-item">
-                    <label class="control-label">Trading Mode</label>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="tradingModeSwitch">
-                            <span class="slider"></span>
-                        </label>
-                        <span id="tradingModeLabel" style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">PAPER</span>
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <ul class="tab-nav-list">
+                <li class="tab-nav-item">
+                    <button class="tab-nav-button active" data-tab="overview">
+                        <span class="tab-nav-icon">📊</span>
+                        Overview
+                    </button>
+                </li>
+                <li class="tab-nav-item">
+                    <button class="tab-nav-button" data-tab="trades">
+                        <span class="tab-nav-icon">📈</span>
+                        Trades
+                    </button>
+                </li>
+                <li class="tab-nav-item">
+                    <button class="tab-nav-button" data-tab="manual">
+                        <span class="tab-nav-icon">✋</span>
+                        Manual Entry
+                    </button>
+                </li>
+                <li class="tab-nav-item">
+                    <button class="tab-nav-button" data-tab="risk">
+                        <span class="tab-nav-icon">🛡️</span>
+                        Risk Management
+                    </button>
+                </li>
+                <li class="tab-nav-item">
+                    <button class="tab-nav-button" data-tab="strategy">
+                        <span class="tab-nav-icon">🎯</span>
+                        Strategy
+                    </button>
+                </li>
+                <li class="tab-nav-item">
+                    <button class="tab-nav-button" data-tab="analytics">
+                        <span class="tab-nav-icon">📈</span>
+                        Analytics
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Tab Content: Overview -->
+        <div id="overview-tab" class="tab-content active">
+            <!-- Control Panel -->
+            <section class="control-panel">
+                <div class="control-grid">
+                    <div class="control-item">
+                        <label class="control-label">Trading Mode</label>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="tradingModeSwitch">
+                                <span class="slider"></span>
+                            </label>
+                            <span id="tradingModeLabel" style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">PAPER</span>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Trading Platform</label>
+                        <select class="select-modern" id="platformSelect">
+                            <option value="paper">📄 Paper Trading</option>
+                            <option value="delta-india" selected>🇮🇳 Delta India</option>
+                            <option value="delta-us">🇺🇸 Delta US</option>
+                            <option value="coinbase">🔷 Coinbase Pro</option>
+                            <option value="binance">🔶 Binance</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">AI Provider</label>
+                        <select class="select-modern" id="aiProviderSelect">
+                            <option value="pattern_only">⚡ Pattern Only (Ultra Fast)</option>
+                            <option value="ollama">🦙 Ollama (Local AI)</option>
+                            <option value="openai">🤖 OpenAI (Cloud AI)</option>
+                            <option value="test">🧪 Test Mode</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">AI Analysis</label>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="aiModeSwitch">
+                                <span class="slider"></span>
+                            </label>
+                            <span id="aiModeLabel" style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">TEST</span>
+                        </div>
                     </div>
                 </div>
-                <div class="control-item">
-                    <label class="control-label">AI Provider</label>
-                    <select class="select-modern" id="aiProviderSelect">
-                        <option value="pattern_only">⚡ Pattern Only (Ultra Fast)</option>
-                        <option value="ollama">🦙 Ollama (Local AI)</option>
-                        <option value="openai">🤖 OpenAI (Cloud)</option>
-                        <option value="test">🧪 Test Mode</option>
-                    </select>
-                </div>
-                <div class="control-item">
-                    <label class="control-label">AI Analysis</label>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="aiModeSwitch">
-                            <span class="slider"></span>
-                        </label>
-                        <span id="aiModeLabel" style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">TEST</span>
+                
+                <div id="trading-alert" class="alert-banner alert-warning" style="margin-top: 1.5rem; margin-bottom: 0;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-orange);"></div>
+                        <strong>PAPER TRADING MODE</strong>
+                    </div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;" id="paper-trading-info">
+                        Balance: <span id="paper-balance">$10,000</span> | P&L: <span id="paper-pnl">$0.00</span> | Trades: <span id="paper-trades-count">0</span>
                     </div>
                 </div>
-            </div>
-            
-            <div id="trading-alert" class="alert-banner alert-warning" style="margin-top: 1.5rem; margin-bottom: 0;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-orange);"></div>
-                    <strong>PAPER TRADING MODE</strong>
-                </div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;" id="paper-trading-info">
-                    Balance: <span id="paper-balance">$10,000</span> | P&L: <span id="paper-pnl">$0.00</span> | Trades: <span id="paper-trades-count">0</span>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Statistics Grid -->
-        <section class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">Total P&L</span>
-                    <span class="stat-icon">💰</span>
+            <!-- Quick Trade Section -->
+            <section class="control-panel">
+                <h3 style="color: var(--text-primary); margin: 0 0 1.5rem 0; font-size: 1.25rem;">⚡ Quick Trade</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <!-- Trade Controls -->
+                    <div>
+                        <div class="control-grid">
+                            <div class="control-item">
+                                <label class="control-label">Symbol</label>
+                                <select class="input-modern" id="quick-trade-symbol">
+                                    <option value="">Select symbol...</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label class="control-label">Quantity</label>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <button class="btn-modern btn-outline" title="Decrease quantity (Q)">-</button>
+                                    <input type="number" class="input-modern" id="quick-trade-quantity" value="0.1" min="0.001" step="0.001" style="text-align: center;">
+                                    <button class="btn-modern btn-outline" title="Increase quantity (W)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quantity Presets -->
+                        <div style="margin-top: 1rem;">
+                            <label class="control-label" style="font-size: 0.875rem;">Quick Amounts</label>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                <button class="btn-modern btn-outline" data-quantity="0.1" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">0.1</button>
+                                <button class="btn-modern btn-outline" data-quantity="0.5" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">0.5</button>
+                                <button class="btn-modern btn-outline" data-quantity="1" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">1</button>
+                                <button class="btn-modern btn-outline" data-quantity="2" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">2</button>
+                                <button class="btn-modern btn-outline" data-quantity="5" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">5</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Trade Buttons -->
+                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                            <button class="btn-modern" id="quick-long-btn" style="flex: 1; background: var(--accent-green); font-weight: 600;" title="Long position (L)">
+                                📈 LONG
+                            </button>
+                            <button class="btn-modern" id="quick-short-btn" style="flex: 1; background: var(--accent-red); font-weight: 600;" title="Short position (S)">
+                                📉 SHORT
+                            </button>
+                        </div>
+                        
+                        <!-- Reverse Button (shown when position exists) -->
+                        <div id="quick-reverse-container" style="margin-top: 0.5rem; display: none;">
+                            <button class="btn-modern" id="reverse-quick-trade-btn" style="width: 100%; background: var(--accent-orange); font-weight: 600;" title="Reverse position (R)">
+                                🔄 REVERSE POSITION
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Position Info -->
+                    <div>
+                        <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 8px;">
+                            <h4 style="color: var(--text-primary); margin: 0 0 1rem 0; font-size: 1rem;">Position Info</h4>
+                            
+                            <div id="quick-trade-no-symbol" style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">
+                                Select a symbol to view position
+                            </div>
+                            
+                            <div id="quick-trade-position-info" style="display: none;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <div>
+                                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Market Price</div>
+                                        <div style="color: var(--text-primary); font-weight: 600;" id="quick-market-price">$0.00</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: var(--text-secondary); font-size: 0.875rem;">24h Change</div>
+                                        <div style="color: var(--text-primary); font-weight: 600;" id="quick-price-change">+0.00%</div>
+                                    </div>
+                                </div>
+                                
+                                <div id="quick-position-details" style="display: none; border-top: 1px solid var(--border-primary); padding-top: 1rem;">
+                                    <h5 style="color: var(--text-primary); margin: 0 0 0.5rem 0; font-size: 0.875rem;">Current Position</h5>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                        <div>
+                                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Size</div>
+                                            <div style="color: var(--text-primary); font-weight: 600;" id="quick-position-size">0</div>
+                                        </div>
+                                        <div>
+                                            <div style="color: var(--text-secondary); font-size: 0.875rem;">PnL</div>
+                                            <div style="font-weight: 600;" id="quick-position-pnl">$0.00</div>
+                                        </div>
+                                        <div>
+                                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Entry Price</div>
+                                            <div style="color: var(--text-primary); font-weight: 600;" id="quick-entry-price">$0.00</div>
+                                        </div>
+                                        <div>
+                                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Side</div>
+                                            <div style="font-weight: 600;" id="quick-position-side">-</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="quick-no-position" style="text-align: center; color: var(--text-secondary); padding: 1rem 0;">
+                                    No active position
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Keyboard Shortcuts Info -->
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <h5 style="color: var(--text-primary); margin: 0 0 0.5rem 0; font-size: 0.875rem;">⌨️ Keyboard Shortcuts</h5>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">
+                                <strong>Q/W:</strong> Quantity ±1 &nbsp;|&nbsp; <strong>L:</strong> Long &nbsp;|&nbsp; <strong>S:</strong> Short<br>
+                                <strong>R:</strong> Reverse &nbsp;|&nbsp; <strong>1-9:</strong> Quick amounts &nbsp;|&nbsp; <strong>Space:</strong> Toggle side
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-value positive" id="total-pnl">$0.00</div>
-                <div class="stat-change neutral" id="pnl-change">No trades yet</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">Total Trades</span>
-                    <span class="stat-icon">📊</span>
-                </div>
-                <div class="stat-value neutral" id="total-trades">0</div>
-                <div class="stat-change neutral" id="trades-change">Ready to trade</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">Win Rate</span>
-                    <span class="stat-icon">🎯</span>
-                </div>
-                <div class="stat-value neutral" id="win-rate">0%</div>
-                <div class="stat-change neutral" id="winrate-change">No completed trades</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">Active Positions</span>
-                    <span class="stat-icon">⚡</span>
-                </div>
-                <div class="stat-value" id="active-trades">0</div>
-                <div class="stat-change neutral" id="active-change">No active positions</div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Trades Table -->
-        <section class="trades-section">
-            <div class="trades-header">
-                <h2 class="trades-title">Trading History</h2>
-                <div class="trades-controls">
-                    <select class="select-modern" id="status-filter" onchange="filterTrades()">
-                        <option value="">All Trades</option>
-                        <option value="active">Active</option>
-                        <option value="closed">Closed</option>
-                        <option value="pending">Pending</option>
-                        <option value="failed">Failed</option>
-                    </select>
+            <!-- Statistics Grid -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total P&L</span>
+                        <span class="stat-icon">💰</span>
+                    </div>
+                    <div class="stat-value positive" id="total-pnl">$0.00</div>
+                    <div class="stat-change neutral" id="pnl-change">No trades yet</div>
                 </div>
-            </div>
-            <div style="overflow-x: auto;">
-                <table class="trades-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Symbol</th>
-                            <th>Side</th>
-                            <th>Quantity</th>
-                            <th>Entry Price</th>
-                            <th>Current P&L</th>
-                            <th>Status</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="trades-table-body">
-                        <tr>
-                            <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-tertiary);">
-                                <div class="loading-spinner" style="margin: 0 auto 1rem;"></div>
-                                Loading trades...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Trades</span>
+                        <span class="stat-icon">📊</span>
+                    </div>
+                    <div class="stat-value neutral" id="total-trades">0</div>
+                    <div class="stat-change neutral" id="trades-change">Ready to trade</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Win Rate</span>
+                        <span class="stat-icon">🎯</span>
+                    </div>
+                    <div class="stat-value neutral" id="win-rate">0%</div>
+                    <div class="stat-change neutral" id="winrate-change">No completed trades</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Active Positions</span>
+                        <span class="stat-icon">⚡</span>
+                    </div>
+                    <div class="stat-value" id="active-trades">0</div>
+                    <div class="stat-change neutral" id="active-change">No active positions</div>
+                </div>
+            </section>
+
+            <!-- Real-time Exchange Positions Section -->
+            <section class="exchange-positions-section" style="margin-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="color: var(--text-primary); margin: 0; font-size: 1.25rem;">
+                        🔥 Real-time Positions 
+                        <span id="exchange-indicator" style="font-size: 0.875rem; color: var(--text-secondary);">🇮🇳 Delta India</span>
+                    </h2>
+                    <div>
+                        <button class="btn-modern btn-outline" id="refresh-exchange-positions-btn">
+                            <span>🔄</span> Refresh
+                        </button>
+                        <span id="last-update-time" style="margin-left: 1rem; font-size: 0.75rem; color: var(--text-tertiary);">
+                            Last update: Never
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Platform Status Banner -->
+                <div id="platform-status-banner" style="margin-bottom: 1rem;">
+                    <div id="delta-india-status" class="platform-banner active">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green);"></div>
+                            <strong>🇮🇳 Delta India Exchange - Live Data</strong>
+                        </div>
+                        <div style="font-size: 0.875rem;">Positions updating every second</div>
+                    </div>
+                    
+                    <div id="other-exchanges-status" class="platform-banner inactive" style="display: none;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-orange);"></div>
+                            <strong>Exchange Integration</strong>
+                        </div>
+                        <div style="font-size: 0.875rem;">Selected exchange not yet integrated</div>
+                    </div>
+                </div>
+                
+                <div id="exchange-positions-container">
+                    <!-- Loading state -->
+                    <div id="positions-loading" style="display: none;">
+                        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
+                            <div>Loading positions from exchange...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- No positions state -->
+                    <div id="no-exchange-positions" class="no-data-state">
+                        <div style="text-align: center; padding: 3rem; color: var(--text-tertiary);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                            <div style="margin-bottom: 0.5rem; font-size: 1.1rem;">No Open Positions</div>
+                            <div style="font-size: 0.875rem;">Open a position using Quick Trade above</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exchange not supported state -->
+                    <div id="exchange-not-supported" style="display: none;">
+                        <div style="text-align: center; padding: 3rem; color: var(--text-tertiary);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🚧</div>
+                            <div style="margin-bottom: 0.5rem; font-size: 1.1rem;">Exchange Not Integrated</div>
+                            <div style="font-size: 0.875rem;">Selected exchange integration is coming soon</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Positions table -->
+                    <div id="exchange-positions-table" style="display: none;">
+                        <table class="trades-table">
+                            <thead>
+                                <tr>
+                                    <th>Symbol</th>
+                                    <th>Side</th>
+                                    <th>Size</th>
+                                    <th>Entry Price</th>
+                                    <th>Mark Price</th>
+                                    <th>Unrealized P&L</th>
+                                    <th>ROE %</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="exchange-positions-tbody">
+                                <!-- Real-time positions will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Trades -->
+        <div id="trades-tab" class="tab-content">
+            <section class="trades-section">
+                <div class="trades-header">
+                    <h2 class="trades-title">Trading History</h2>
+                    <div class="trades-controls">
+                        <select class="select-modern" id="status-filter" onchange="filterTrades()">
+                            <option value="">All Trades</option>
+                            <option value="active">Active</option>
+                            <option value="closed">Closed</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                        <button class="btn-modern btn-primary" onclick="loadTrades()" id="load-trades-btn">
+                            <span>📋</span> Load Trades
+                        </button>
+                        <button class="btn-modern btn-outline" onclick="refreshData()">
+                            <span id="refresh-icon">🔄</span> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="trades-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Symbol</th>
+                                <th>Side</th>
+                                <th>Quantity</th>
+                                <th>Entry Price</th>
+                                <th>Stop Loss</th>
+                                <th>Take Profit</th>
+                                <th>Current P&L</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trades-table-body">
+                            <tr id="trades-placeholder">
+                                <td colspan="11" style="text-align: center; padding: 3rem; color: var(--text-tertiary);">
+                                    <div style="margin: 0 auto 1rem;">📋</div>
+                                    <div style="margin-bottom: 1rem; font-size: 1.1rem;">Click "Load Trades" to view your trading history</div>
+                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">Trades are loaded on demand to improve performance</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Manual Entry -->
+        <div id="manual-tab" class="tab-content">
+            <section class="control-panel">
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--text-primary); margin: 0 0 0.5rem 0; font-size: 1.25rem;">Manual Trade Entry</h3>
+                    <p style="color: var(--text-secondary); margin: 0; font-size: 0.875rem;">Create trades manually when signals are not available or to override automated decisions.</p>
+                </div>
+                
+                <div class="control-grid">
+                    <div class="control-item">
+                        <label class="control-label">Symbol</label>
+                        <select class="select-modern" id="trade-symbol" style="width: 100%;">
+                            <option value="">Select Symbol...</option>
+                            <option value="BTCUSDT">BTC/USDT</option>
+                            <option value="ETHUSDT">ETH/USDT</option>
+                            <option value="ADAUSDT">ADA/USDT</option>
+                            <option value="BNBUSDT">BNB/USDT</option>
+                            <option value="XRPUSDT">XRP/USDT</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Side</label>
+                        <select class="select-modern" id="trade-side" style="width: 100%;">
+                            <option value="">Select Side...</option>
+                            <option value="buy">📈 Buy/Long</option>
+                            <option value="sell">📉 Sell/Short</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Quantity</label>
+                        <input type="number" class="input-modern" id="trade-quantity" placeholder="Enter quantity..." step="0.001" min="0.001">
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Entry Price</label>
+                        <input type="number" class="input-modern" id="trade-entry-price" placeholder="Enter price..." step="0.01" min="0.01">
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Stop Loss (Optional)</label>
+                        <input type="number" class="input-modern" id="trade-stop-loss" placeholder="Enter stop loss..." step="0.01" min="0">
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Take Profit (Optional)</label>
+                        <input type="number" class="input-modern" id="trade-take-profit" placeholder="Enter take profit..." step="0.01" min="0">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                    <button id="create-manual-trade" class="btn-modern btn-success" onclick="createManualTrade()" disabled>
+                        🚀 Create Trade
+                    </button>
+                    <button id="get-market-price" class="btn-modern btn-outline" onclick="getMarketPrice()">
+                        📊 Get Market Price
+                    </button>
+                    <button id="clear-form" class="btn-modern btn-outline" onclick="clearManualTradeForm()">
+                        🔄 Clear Form
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Risk Management -->
+        <div id="risk-tab" class="tab-content">
+            <section class="control-panel">
+                <h3 style="color: var(--text-primary); margin: 0 0 1.5rem 0; font-size: 1.25rem;">Risk Management</h3>
+                
+                <!-- Global Risk Settings -->
+                <div class="control-grid">
+                    <div class="control-item">
+                        <label class="control-label">Max Risk per Trade (%)</label>
+                        <input type="number" class="input-modern" id="max-risk-per-trade" value="2" min="0.1" max="10" step="0.1">
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Max Concurrent Positions</label>
+                        <input type="number" class="input-modern" id="max-positions" value="5" min="1" max="20" step="1">
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Daily Loss Limit (%)</label>
+                        <input type="number" class="input-modern" id="daily-loss-limit" value="5" min="1" max="20" step="0.5">
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Auto Stop Loss</label>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="auto-stop-loss" checked>
+                                <span class="slider"></span>
+                            </label>
+                            <span style="font-family: 'JetBrains Mono', monospace; font-weight: 600;">ENABLED</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Symbol-Specific Risk Settings -->
+                <div style="margin-top: 2rem;">
+                    <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Symbol-Specific Risk Settings</h4>
+                    
+                    <div class="control-grid">
+                        <div class="control-item">
+                            <label class="control-label">Select Symbol</label>
+                            <select class="input-modern" id="risk-symbol-select">
+                                <option value="">Select a symbol...</option>
+                            </select>
+                        </div>
+                        <div class="control-item">
+                            <label class="control-label">Risk Type</label>
+                            <select class="input-modern" id="risk-type-select">
+                                <option value="percentage">Percentage (%)</option>
+                                <option value="amount">Fixed Amount ($)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-grid" style="margin-top: 1rem;">
+                        <div class="control-item">
+                            <label class="control-label" id="stop-loss-label">Stop Loss (%)</label>
+                            <input type="number" class="input-modern" id="symbol-stop-loss" value="2" min="0.1" step="0.1">
+                        </div>
+                        <div class="control-item">
+                            <label class="control-label" id="take-profit-label">Take Profit (%)</label>
+                            <input type="number" class="input-modern" id="symbol-take-profit" value="4" min="0.1" step="0.1">
+                        </div>
+                        <div class="control-item">
+                            <label class="control-label" id="position-size-label">Max Position Size (%)</label>
+                            <input type="number" class="input-modern" id="symbol-position-size" value="10" min="1" step="1">
+                        </div>
+                        <div class="control-item">
+                            <label class="control-label">Risk Per Trade</label>
+                            <input type="number" class="input-modern" id="symbol-risk-per-trade" value="2" min="0.1" step="0.1">
+                            <small class="input-help" id="risk-per-trade-help">% of portfolio</small>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem;">
+                        <button class="btn-modern btn-success" onclick="addSymbolRiskSettings()">
+                            ➕ Add Symbol Settings
+                        </button>
+                        <button class="btn-modern btn-outline" onclick="clearSymbolForm()">
+                            🗑️ Clear Form
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Symbol Risk Settings -->
+                <div style="margin-top: 2rem;">
+                    <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Active Symbol Settings</h4>
+                    <div id="symbol-risk-list" style="background: var(--bg-tertiary); border-radius: 8px; padding: 1rem;">
+                        <div style="color: var(--text-secondary); text-align: center; padding: 2rem;">
+                            No symbol-specific risk settings configured
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <button class="btn-modern btn-success" onclick="saveRiskSettings()">
+                        💾 Save Risk Settings
+                    </button>
+                    <button class="btn-modern btn-outline" onclick="resetRiskSettings()">
+                        🔄 Reset to Defaults
+                    </button>
+                </div>
+
+                <!-- Risk Summary -->
+                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                    <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Risk Summary</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Current Exposure</div>
+                            <div style="color: var(--text-primary); font-weight: 600; font-size: 1.125rem;" id="current-exposure">$0.00</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Risk Utilization</div>
+                            <div style="color: var(--text-primary); font-weight: 600; font-size: 1.125rem;" id="risk-utilization">0%</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Max Daily Loss</div>
+                            <div style="color: var(--accent-red); font-weight: 600; font-size: 1.125rem;" id="max-daily-loss">-$500.00</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Available Positions</div>
+                            <div style="color: var(--text-primary); font-weight: 600; font-size: 1.125rem;" id="available-positions">5</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Strategy -->
+        <div id="strategy-tab" class="tab-content">
+            <section class="control-panel">
+                <h3 style="color: var(--text-primary); margin: 0 0 1.5rem 0; font-size: 1.25rem;">Trading Strategy</h3>
+                
+                <div class="control-grid">
+                    <div class="control-item">
+                        <label class="control-label">Strategy Type</label>
+                        <select class="select-modern" id="strategy-type">
+                            <option value="momentum">📈 Momentum Trading</option>
+                            <option value="reversal">🔄 Reversal Trading</option>
+                            <option value="breakout">💥 Breakout Strategy</option>
+                            <option value="scalping">⚡ Scalping</option>
+                            <option value="swing">📊 Swing Trading</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Signal Confidence Threshold</label>
+                        <input type="range" class="range-modern" id="confidence-threshold" min="0.1" max="1" step="0.05" value="0.7">
+                        <div style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.25rem;">
+                            Current: <span id="confidence-value">70%</span>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Position Size Method</label>
+                        <select class="select-modern" id="position-size-method">
+                            <option value="fixed">Fixed Amount</option>
+                            <option value="percentage">Percentage of Balance</option>
+                            <option value="kelly">Kelly Criterion</option>
+                            <option value="volatility">Volatility-Based</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Timeframe Focus</label>
+                        <select class="select-modern" id="timeframe-focus">
+                            <option value="1m">1 Minute</option>
+                            <option value="5m">5 Minutes</option>
+                            <option value="15m">15 Minutes</option>
+                            <option value="1h">1 Hour</option>
+                            <option value="4h">4 Hours</option>
+                            <option value="1d">Daily</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Auto Trade Signals</label>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="auto-trade-signals">
+                                <span class="slider"></span>
+                            </label>
+                            <span style="font-family: 'JetBrains Mono', monospace; font-weight: 600;" id="auto-trade-label">MANUAL</span>
+                        </div>
+                    </div>
+                    <div class="control-item">
+                        <label class="control-label">Max Leverage</label>
+                        <select class="select-modern" id="max-leverage">
+                            <option value="1">1x (Spot)</option>
+                            <option value="2">2x</option>
+                            <option value="5">5x</option>
+                            <option value="10">10x</option>
+                            <option value="20">20x</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <button class="btn-modern btn-success" onclick="saveStrategySettings()">
+                        💾 Save Strategy
+                    </button>
+                    <button class="btn-modern btn-outline" onclick="backtestStrategy()">
+                        📊 Backtest Strategy
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Analytics -->
+        <div id="analytics-tab" class="tab-content">
+            <section class="control-panel">
+                <h3 style="color: var(--text-primary); margin: 0 0 1.5rem 0; font-size: 1.25rem;">Performance Analytics</h3>
+                
+                <!-- Performance Metrics -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div style="padding: 1.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Sharpe Ratio</h4>
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-green);" id="sharpe-ratio">1.45</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Risk-adjusted returns</div>
+                    </div>
+                    <div style="padding: 1.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Max Drawdown</h4>
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-red);" id="max-drawdown">-8.2%</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Largest peak-to-trough decline</div>
+                    </div>
+                    <div style="padding: 1.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Profit Factor</h4>
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-blue);" id="profit-factor">2.3</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Gross profit / Gross loss</div>
+                    </div>
+                    <div style="padding: 1.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Average Hold Time</h4>
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-orange);" id="avg-hold-time">4.2h</div>
+                        <div style="color: var(--text-secondary); font-size: 0.875rem;">Mean position duration</div>
+                    </div>
+                </div>
+
+                <!-- Chart Placeholder -->
+                <div style="padding: 2rem; background: var(--bg-tertiary); border-radius: 8px; text-align: center; margin-bottom: 2rem;">
+                    <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Equity Curve</h4>
+                    <div style="color: var(--text-secondary); font-size: 1rem;">📈 Performance chart will be displayed here</div>
+                    <button class="btn-modern btn-outline" style="margin-top: 1rem;" onclick="loadEquityCurve()">
+                        📊 Load Chart
+                    </button>
+                </div>
+
+                <!-- Recent Performance -->
+                <div>
+                    <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">Recent Performance</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Last 7 Days</div>
+                            <div style="color: var(--accent-green); font-weight: 600; font-size: 1.125rem;" id="performance-7d">+$234.56</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Last 30 Days</div>
+                            <div style="color: var(--accent-green); font-weight: 600; font-size: 1.125rem;" id="performance-30d">+$1,245.32</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">This Month</div>
+                            <div style="color: var(--accent-green); font-weight: 600; font-size: 1.125rem;" id="performance-month">+$892.17</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">All Time</div>
+                            <div style="color: var(--accent-green); font-weight: 600; font-size: 1.125rem;" id="performance-total">+$2,464.20</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
     <script src="./dashboard.js"></script>
+    <script src="./manual-trade.js"></script>
+    <script src="./exchange-positions.js"></script>
+    <script src="./tab-navigation.js"></script>
+    <script src="./quick-trade.js"></script>
+    <script>
+        // Initialize functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof initializeQuickTrade === 'function') {
+                initializeQuickTrade();
+                console.log('Quick trade initialized');
+            }
+            
+            if (typeof initializeExchangePositions === 'function') {
+                initializeExchangePositions();
+                console.log('Exchange positions initialized');
+            }
+        });
+    </script>
 </body>
 </html>
